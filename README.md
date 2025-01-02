@@ -1,0 +1,1 @@
+This project was a guided-tutorial from boot.dev to recreate the original asteroids game in python. I may continue it later and add some more stuff to it. 
