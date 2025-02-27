@@ -1,11 +1,12 @@
 import sys
 import pygame
+import pygame_menu
+from pygame_menu import themes
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from asteroid import Asteroid
 from player import Player
 from asteroidfield import AsteroidField
 from bullets import Bullets
-from menu import main_menu
 
 
 def main():
@@ -13,6 +14,57 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
+    # menu
+
+    main_menu = pygame_menu.Menu(
+        "Asteroids",
+        SCREEN_WIDTH * 0.5,
+        SCREEN_HEIGHT * 0.5,
+        theme=themes.THEME_SOLARIZED,
+    )
+
+    def profiles():
+        pass
+
+    profiles_selector = main_menu.add.button("Profiles", profiles)
+
+    def single_player():
+        pass
+
+    single_player = main_menu.add.button("Single player", single_player)
+
+    def multiplayer():
+        pass
+
+    multiplayer = main_menu.add.button("Multiplayer", multiplayer)
+
+    def history():
+        pass
+
+    history_mode_selector = main_menu.add.button("History", history)
+
+    def leader_board():
+        pass
+
+    leader_board_selector = main_menu.add.button("Leader board", leader_board)
+
+    def settings_functionality():
+        pass
+
+    settings = main_menu.add.button("Settings", settings_functionality)
+
+    def quit():
+        pygame.quit()
+
+    main_menu.add.button("Choose profile", profiles_selector)
+    main_menu.add.button("Single player", single_player)
+    main_menu.add.button("Multiplayer", multiplayer)
+    main_menu.add.button("History", history_mode_selector)
+    main_menu.add.button("Leader board", leader_board_selector)
+    main_menu.add.button("Settings", settings)
+    main_menu.add.button("Quit", quit)
+
+    # groups
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
