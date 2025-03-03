@@ -7,12 +7,21 @@
 * shield
 * movement speed increase
 * score multiplier
+* turn speed increase
 
 ## Gameplay
 
 * time score multiplier
 * player score multiplier
 * increase difficulty over time
+* add multiplier - same device to start then add networking for online multiplayer
+* ~update player hitbox to triangle~ completed
+
+## Functionality
+
+* add menu (currently in progress)
+* add textures
+* connect to database to have functional player history and leader boards.
 
 ## Menu
 

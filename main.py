@@ -14,56 +14,56 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    # menu
-
-    main_menu = pygame_menu.Menu(
-        "Asteroids",
-        SCREEN_WIDTH * 0.5,
-        SCREEN_HEIGHT * 0.5,
-        theme=themes.THEME_SOLARIZED,
-    )
-
-    def profiles():
-        pass
-
-    profiles_selector = main_menu.add.button("Profiles", profiles)
-
-    def single_player():
-        pass
-
-    single_player = main_menu.add.button("Single player", single_player)
-
-    def multiplayer():
-        pass
-
-    multiplayer = main_menu.add.button("Multiplayer", multiplayer)
-
-    def history():
-        pass
-
-    history_mode_selector = main_menu.add.button("History", history)
-
-    def leader_board():
-        pass
-
-    leader_board_selector = main_menu.add.button("Leader board", leader_board)
-
-    def settings_functionality():
-        pass
-
-    settings = main_menu.add.button("Settings", settings_functionality)
-
-    def quit():
-        pygame.quit()
-
-    main_menu.add.button("Choose profile", profiles_selector)
-    main_menu.add.button("Single player", single_player)
-    main_menu.add.button("Multiplayer", multiplayer)
-    main_menu.add.button("History", history_mode_selector)
-    main_menu.add.button("Leader board", leader_board_selector)
-    main_menu.add.button("Settings", settings)
-    main_menu.add.button("Quit", quit)
-
+    #    # menu
+    #
+    #    main_menu = pygame_menu.Menu(
+    #        "Asteroids",
+    #        SCREEN_WIDTH * 0.5,
+    #        SCREEN_HEIGHT * 0.5,
+    #        theme=themes.THEME_SOLARIZED,
+    #    )
+    #
+    #    def profiles():
+    #        pass
+    #
+    #    profiles_selector = main_menu.add.button("Profiles", profiles)
+    #
+    #    def single_player():
+    #        pass
+    #
+    #    single_player = main_menu.add.button("Single player", single_player)
+    #
+    #    def multiplayer():
+    #        pass
+    #
+    #    multiplayer = main_menu.add.button("Multiplayer", multiplayer)
+    #
+    #    def history():
+    #        pass
+    #
+    #    history_mode_selector = main_menu.add.button("History", history)
+    #
+    #    def leader_board():
+    #        pass
+    #
+    #    leader_board_selector = main_menu.add.button("Leader board", leader_board)
+    #
+    #    def settings_functionality():
+    #        pass
+    #
+    #    settings = main_menu.add.button("Settings", settings_functionality)
+    #
+    #    def quit():
+    #        pygame.quit()
+    #
+    #    main_menu.add.button("Choose profile", profiles_selector)
+    #    main_menu.add.button("Single player", single_player)
+    #    main_menu.add.button("Multiplayer", multiplayer)
+    #    main_menu.add.button("History", history_mode_selector)
+    #    main_menu.add.button("Leader board", leader_board_selector)
+    #    main_menu.add.button("Settings", settings)
+    #    main_menu.add.button("Quit", quit)
+    #
     # groups
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -112,15 +112,15 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        if main_menu.is_enabled():
-            main_menu.update(events)
-            main_menu.draw(screen)
+        #  if main_menu.is_enabled():
+        #     main_menu.update(events)
+        #    main_menu.draw(screen)
 
         for obj in updatable:
             obj.update(dt)
 
-        for obj in asteroids:
-            if obj.collision_detect(player):
+        for asteroid in asteroids:
+            if player.collision_detect(asteroid):
                 print("Game over!")
                 sys.exit()
 

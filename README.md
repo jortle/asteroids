@@ -1,6 +1,9 @@
-This project was a guided-tutorial from boot.dev to recreate the original asteroids game in python. I may continue it later and add some more stuff to it.
+# ChoccyMilk's Asteroids
 
-I have added a timer and am working on score tracking.
+## This project was a guided-tutorial from boot.dev to recreate the original asteroids game in python
 
-I want to add textures to the asteroids, ship, bullets, and background. As well as power-ups, different difficulties, and possibly modes.
+The project from boot.dev is a pretty bare bones guided tutorial on how to make a game in python. I have added on many features and plan on adding more. Here I will list what I have completed and you can check the TODO file for what I want to add.
 
+* Timer
+* Score
+* Triangle hitbox - the tutorial has the player drawn as a triangle but the hitbox is a circle. I have updated the hitbox to fit the drawn player.
