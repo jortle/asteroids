@@ -97,20 +97,23 @@ def main():
     ScoreFont = Font.render("Score: {0}".format(Score), 1, White)
     ScoreFontR = ScoreFont.get_rect()
     ScoreFontR.center = (int(SCREEN_WIDTH * 0.4), 20)
+    time_multipler = 1
 
     # Rate of Fire (RPM)
-    Rate_of_Fire = 0.3 * 60
+    # Rate_of_Fire = 0.3 * 60
 
     # Accuracy (ACC)
 
     # menu shown
-    Menu_Shown = False
+    # Menu_Shown = False
 
     while True:
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 return
+
+        time_multipler += dt * 0.001
 
         #  if main_menu.is_enabled():
         #     main_menu.update(events)
@@ -127,7 +130,7 @@ def main():
         for asteroid in asteroids:
             for bullet in bullets:
                 if asteroid.collision_detect(bullet):
-                    Score += asteroid.score
+                    Score += asteroid.score * player.multiplier * time_multipler
                     bullet.kill()
                     asteroid.split()
 
@@ -149,7 +152,7 @@ def main():
             screen.blit(TimeFont, TimeFontR)
 
             # draw score
-            ScoreFont = Font.render("Score: {0}".format(Score), 0, White)
+            ScoreFont = Font.render("Score: {0:d}".format(int(Score)), 0, White)
             screen.blit(ScoreFont, ScoreFontR)
 
         pygame.display.flip()

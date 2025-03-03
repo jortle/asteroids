@@ -11,7 +11,7 @@
 
 ## Gameplay
 
-* time score multiplier
+* ~time score multiplier~ completed
 * player score multiplier
 * increase difficulty over time
 * add multiplier - same device to start then add networking for online multiplayer

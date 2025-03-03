@@ -1,0 +1,11 @@
+[project]
+name = "asteroids"
+version = "0.1.0"
+description = "Asteroids game written in Python"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "pygame",
+    "pygame-menu",
+    "numpy",
+]

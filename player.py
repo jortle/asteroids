@@ -18,6 +18,7 @@ class Player(TriangleShape):
         super().__init__(x, y)
         self.rotation = 0
         self.timer = 0
+        self.multiplier = 1
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
