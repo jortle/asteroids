@@ -19,6 +19,8 @@ class Player(TriangleShape):
         self.rotation = 0
         self.timer = 0
         self.multiplier = 1
+        self.bullets = []
+        self.bullets_shot = 0
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -60,11 +62,16 @@ class Player(TriangleShape):
         if self.timer > 0:
             pass
         else:
-            bullet = Bullets(self.position.x, self.position.y, BULLET_BASE_RADIUS)
+            bullet = Bullets(self.position.x, self.position.y, BULLET_BASE_RADIUS, self)
             bullet.velocity = (
                 pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_BASE_SHOOT_SPEED
             )
+            self.bullets.append(bullet)
+            self.bullets_shot += 1
             self.timer = PLAYER_BASE_SHOOT_COOLDOWN
+
+    def pop(self, bullet):
+        self.bullets.remove(bullet)
 
     def triangle(self):
         math_rotation = math.radians(self.rotation + 90)

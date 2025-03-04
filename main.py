@@ -36,21 +36,22 @@ def main():
 
     # time related
     Font = pygame.font.SysFont("Trebuchet MS", 25)
-    Minute = 0
-    Second = 0
+    minute = 0
+    second = 0
     White = (255, 255, 255)
     TimeFont = Font.render(
-        "Time:{0:02}".format(Minute), 1, White
+        "Time:{0:02}".format(minute), 1, White
     )  # zero-pad minutes to 2 digits
     TimeFontR = TimeFont.get_rect()
-    TimeFontR.center = (int(SCREEN_WIDTH * 0.6), 20)
+    TimeFontR.center = (int(SCREEN_WIDTH * 0.3), 20)
 
     # score related
-    Score = 0
-    ScoreFont = Font.render("Score: {0}".format(Score), 1, White)
-    ScoreFontR = ScoreFont.get_rect()
-    ScoreFontR.center = (int(SCREEN_WIDTH * 0.4), 20)
+    score = 0
     time_multipler = 1
+
+    # accuracy related
+    asteroids_destroyed = 0
+    accuracy = 0
 
     while True:
         events = pygame.event.get()
@@ -59,6 +60,10 @@ def main():
                 return
 
         time_multipler += dt * 0.001
+        if asteroids_destroyed > 0:
+            accuracy = asteroids_destroyed / player.bullets_shot * 100
+        else:
+            accuracy = 0
 
         for obj in updatable:
             obj.update(dt)
@@ -69,31 +74,38 @@ def main():
                 sys.exit()
 
             for bullet in bullets:
+                if (
+                    bullet.position[0] < 0
+                    or bullet.position[1] < 0
+                    or bullet.position[0] > SCREEN_WIDTH
+                    or bullet.position[1] > SCREEN_HEIGHT
+                ):
+                    bullet.kill()
                 if asteroid.collision_detect(bullet):
-                    Score += asteroid.score * player.multiplier * time_multipler
+                    score += asteroid.score * player.multiplier * time_multipler
+                    bullet.owner.pop(bullet)
+                    asteroids_destroyed += 1
                     bullet.kill()
                     asteroid.split()
 
         screen.fill("black")
 
         # time tracking
-        Minute = pygame.time.get_ticks() // 1000 // 60
-        Second = pygame.time.get_ticks() // 1000 % 60
+        minute = pygame.time.get_ticks() // 1000 // 60
+        second = pygame.time.get_ticks() // 1000 % 60
 
         for obj in drawable:
             obj.draw(screen)
 
             # draw time
             TimeFont = Font.render(
-                "Time {0:02}:{1:02}".format(Minute, Second),
+                "Time {0:02}:{1:02}        Score {2:d}     Accuracy {3:d}%".format(
+                    minute, second, int(score), int(accuracy)
+                ),
                 0,
                 White,
             )
             screen.blit(TimeFont, TimeFontR)
-
-            # draw score
-            ScoreFont = Font.render("Score: {0:d}".format(int(Score)), 0, White)
-            screen.blit(ScoreFont, ScoreFontR)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
