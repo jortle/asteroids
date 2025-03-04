@@ -1,12 +1,14 @@
 import sys
 import pygame
-import pygame_menu
-from pygame_menu import themes
+
+# import pygame_menu
+# from pygame_menu import themes
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from asteroid import Asteroid
 from player import Player
 from asteroidfield import AsteroidField
 from bullets import Bullets
+from powerups import PowerUp
 
 
 def main():
@@ -14,56 +16,6 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    #    # menu
-    #
-    #    main_menu = pygame_menu.Menu(
-    #        "Asteroids",
-    #        SCREEN_WIDTH * 0.5,
-    #        SCREEN_HEIGHT * 0.5,
-    #        theme=themes.THEME_SOLARIZED,
-    #    )
-    #
-    #    def profiles():
-    #        pass
-    #
-    #    profiles_selector = main_menu.add.button("Profiles", profiles)
-    #
-    #    def single_player():
-    #        pass
-    #
-    #    single_player = main_menu.add.button("Single player", single_player)
-    #
-    #    def multiplayer():
-    #        pass
-    #
-    #    multiplayer = main_menu.add.button("Multiplayer", multiplayer)
-    #
-    #    def history():
-    #        pass
-    #
-    #    history_mode_selector = main_menu.add.button("History", history)
-    #
-    #    def leader_board():
-    #        pass
-    #
-    #    leader_board_selector = main_menu.add.button("Leader board", leader_board)
-    #
-    #    def settings_functionality():
-    #        pass
-    #
-    #    settings = main_menu.add.button("Settings", settings_functionality)
-    #
-    #    def quit():
-    #        pygame.quit()
-    #
-    #    main_menu.add.button("Choose profile", profiles_selector)
-    #    main_menu.add.button("Single player", single_player)
-    #    main_menu.add.button("Multiplayer", multiplayer)
-    #    main_menu.add.button("History", history_mode_selector)
-    #    main_menu.add.button("Leader board", leader_board_selector)
-    #    main_menu.add.button("Settings", settings)
-    #    main_menu.add.button("Quit", quit)
-    #
     # groups
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -74,6 +26,7 @@ def main():
     AsteroidField.containers = updatable
     Asteroid.containers = (asteroids, updatable, drawable)
     Player.containers = (updatable, drawable)
+    PowerUp.containers = (updatable, drawable)
 
     asteroid_field = AsteroidField()
 
@@ -99,14 +52,6 @@ def main():
     ScoreFontR.center = (int(SCREEN_WIDTH * 0.4), 20)
     time_multipler = 1
 
-    # Rate of Fire (RPM)
-    # Rate_of_Fire = 0.3 * 60
-
-    # Accuracy (ACC)
-
-    # menu shown
-    # Menu_Shown = False
-
     while True:
         events = pygame.event.get()
         for event in events:
@@ -114,10 +59,6 @@ def main():
                 return
 
         time_multipler += dt * 0.001
-
-        #  if main_menu.is_enabled():
-        #     main_menu.update(events)
-        #    main_menu.draw(screen)
 
         for obj in updatable:
             obj.update(dt)
@@ -127,7 +68,6 @@ def main():
                 print("Game over!")
                 sys.exit()
 
-        for asteroid in asteroids:
             for bullet in bullets:
                 if asteroid.collision_detect(bullet):
                     Score += asteroid.score * player.multiplier * time_multipler

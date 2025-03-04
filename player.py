@@ -4,9 +4,9 @@ from constants import (
     PLAYER_RADIUS,
     PLAYER_TURN_SPEED,
     PLAYER_SPEED,
-    PLAYER_SHOOT_SPEED,
-    PLAYER_SHOOT_COOLDOWN,
-    BULLET_RADIUS,
+    PLAYER_BASE_SHOOT_SPEED,
+    PLAYER_BASE_SHOOT_COOLDOWN,
+    BULLET_BASE_RADIUS,
 )
 from bullets import Bullets
 import math
@@ -60,11 +60,11 @@ class Player(TriangleShape):
         if self.timer > 0:
             pass
         else:
-            bullet = Bullets(self.position.x, self.position.y, BULLET_RADIUS)
+            bullet = Bullets(self.position.x, self.position.y, BULLET_BASE_RADIUS)
             bullet.velocity = (
-                pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+                pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_BASE_SHOOT_SPEED
             )
-            self.timer = PLAYER_SHOOT_COOLDOWN
+            self.timer = PLAYER_BASE_SHOOT_COOLDOWN
 
     def triangle(self):
         math_rotation = math.radians(self.rotation + 90)
