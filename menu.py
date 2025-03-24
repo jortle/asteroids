@@ -16,12 +16,12 @@ coop_menu = pygame_menu.Menu(
 )
 coop_menu.add.button(
     "Survival - in progress",
-    lambda: game_start(3, settings_dict),
+    lambda: game_start(2, 3, settings_dict),
 )
 
 coop_menu.add.button(
     "Time Trial - in progress",
-    lambda: game_start(4, settings_dict),
+    lambda: game_start(2, 4, settings_dict),
 )
 
 
@@ -37,12 +37,12 @@ versus_menu = pygame_menu.Menu(
 )
 versus_menu.add.button(
     "Survival - in progress",
-    lambda: game_start(5, settings_dict),
+    lambda: game_start(2, 5, settings_dict),
 )
 
 versus_menu.add.button(
     "Time Trial - in progress",
-    lambda: game_start(6, settings_dict),
+    lambda: game_start(2, 6, settings_dict),
 )
 
 
@@ -55,10 +55,10 @@ single_player_menu = pygame_menu.Menu(
 )
 single_player_menu.add.button(
     "Survival",
-    lambda: game_start(1, settings_dict),
+    lambda: game_start(1, 1, settings_dict),
 )
 single_player_menu.add.button(
-    "Time Trial - in progress", lambda: game_start(2, settings_dict)
+    "Time Trial - in progress", lambda: game_start(1, 2, settings_dict)
 )
 
 multiplayer_menu = pygame_menu.Menu(

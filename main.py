@@ -10,7 +10,7 @@ import random
 from render_hud import render_hud
 
 
-def game_start(button_id, settings_dict):
+def game_start(num_players, button_id, settings_dict):
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -29,7 +29,13 @@ def game_start(button_id, settings_dict):
 
     asteroid_field = AsteroidField()
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    # creating players
+    players = {}
+    print(num_players)
+    for i in range(num_players):
+        player_name = f"player{i}"
+        print(player_name)
+        players[player_name] = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, player_name)
 
     dt = 0
 
@@ -77,7 +83,8 @@ def game_start(button_id, settings_dict):
         else:
             pass
 
-    # settings tracking
+    for player in players:
+        print(players[player].id)
 
     while True:
         events = pygame.event.get()
@@ -88,12 +95,13 @@ def game_start(button_id, settings_dict):
         screen.blit(background, (0, 0))
 
         time_multipler += dt * TIME_MULTIPLIER_MAGIC
-        if player.bullets_shot > 0:
-            accuracy = int(asteroids_destroyed / player.bullets_shot * 100)
-        else:
-            accuracy = 0
+        for player in players:
+            if players[player].bullets_shot > 0:
+                accuracy = int(asteroids_destroyed / players[player].bullets_shot * 100)
+            else:
+                accuracy = 0
 
-        rpm = int(60 // player.rpm)
+            rpm = int(60 // players[player].rpm)
 
         for obj in updatable:
             obj.update(dt)
@@ -110,9 +118,10 @@ def game_start(button_id, settings_dict):
 
         # collision detection
         for asteroid in asteroids:
-            if player.collision_detect(asteroid):
-                print("Game over!")
-                sys.exit()
+            for player in players:
+                if players[player].collision_detect(asteroid):
+                    print("Game over!")
+                    sys.exit()
 
             for bullet in bullets:
                 if (
@@ -122,12 +131,17 @@ def game_start(button_id, settings_dict):
                     or bullet.position[1] > SCREEN_HEIGHT
                 ):
                     bullet.kill()
-                if asteroid.collision_detect(bullet):
-                    score += int(asteroid.score * player.multiplier * time_multipler)
+
+                splitting_happened = False
+                if asteroid.collision_detect(bullet) and not splitting_happened:
+                    score += int(
+                        asteroid.score * players[player].multiplier * time_multipler
+                    )
                     bullet.owner.pop(bullet)
                     asteroids_destroyed += 1
                     bullet.kill()
                     asteroid.split()
+                    splitting_happened = True
 
         # time tracking
         minute = pygame.time.get_ticks() // 1000 // 60

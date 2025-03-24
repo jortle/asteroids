@@ -14,7 +14,7 @@ from collision_math import circle_triangle_collision
 
 
 class Player(TriangleShape):
-    def __init__(self, x, y):
+    def __init__(self, x, y, id):
         super().__init__(x, y)
         self.rotation = 0
         self.timer = 0
@@ -22,6 +22,7 @@ class Player(TriangleShape):
         self.bullets = []
         self.bullets_shot = 0
         self.rpm = PLAYER_BASE_SHOOT_COOLDOWN
+        self.id = id
 
         # image
         self.image_path = "./assets/Player-Damaged.png"
@@ -37,7 +38,10 @@ class Player(TriangleShape):
 
     def draw(self, screen):
         # screen.blit(self.image, (self.position[0], self.position[1]))
-        pygame.draw.polygon(screen, "green", self.triangle(), 2)
+        if self.id == "player0":
+            pygame.draw.polygon(screen, "green", self.triangle(), 2)
+        else:
+            pygame.draw.polygon(screen, "red", self.triangle(), 2)
 
         # below lines are used for debugging
         # uncomment to see them
@@ -58,17 +62,28 @@ class Player(TriangleShape):
     def update(self, dt):
         self.timer -= dt
         keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_a]:
-            self.rotate(-dt)
-        if keys[pygame.K_d]:
-            self.rotate(dt)
-        if keys[pygame.K_w]:
-            self.move(dt)
-        if keys[pygame.K_s]:
-            self.move(-dt)
-        if keys[pygame.K_SPACE]:
-            self.shoot()
+        if self.id == "player0":
+            if keys[pygame.K_a]:
+                self.rotate(-dt)
+            if keys[pygame.K_d]:
+                self.rotate(dt)
+            if keys[pygame.K_w]:
+                self.move(dt)
+            if keys[pygame.K_s]:
+                self.move(-dt)
+            if keys[pygame.K_SPACE]:
+                self.shoot()
+        else:
+            if keys[pygame.K_LEFT]:
+                self.rotate(-dt)
+            if keys[pygame.K_RIGHT]:
+                self.rotate(dt)
+            if keys[pygame.K_UP]:
+                self.move(dt)
+            if keys[pygame.K_DOWN]:
+                self.move(-dt)
+            if keys[pygame.K_RCTRL]:
+                self.shoot()
 
     def shoot(self):
         if self.timer > 0:
