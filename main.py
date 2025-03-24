@@ -1,17 +1,16 @@
 import sys
 import pygame
-
-# import pygame_menu
-# from pygame_menu import themes
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, TIME_MULTIPLIER_MAGIC
 from asteroid import Asteroid
 from player import Player
 from asteroidfield import AsteroidField
 from bullets import Bullets
 from powerups import PowerUp
+import random
+from render_hud import render_hud
 
 
-def main():
+def game_start(button_id, settings_dict):
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -34,16 +33,12 @@ def main():
 
     dt = 0
 
-    # time related
-    Font = pygame.font.SysFont("Trebuchet MS", 25)
+    # hud variables
     minute = 0
     second = 0
-    White = (255, 255, 255)
-    TimeFont = Font.render(
-        "Time:{0:02}".format(minute), 1, White
-    )  # zero-pad minutes to 2 digits
-    TimeFontR = TimeFont.get_rect()
-    TimeFontR.center = (int(SCREEN_WIDTH * 0.3), 20)
+    score = 0
+    accuracy = 0
+    rpm = 0
 
     # score related
     score = 0
@@ -53,21 +48,67 @@ def main():
     asteroids_destroyed = 0
     accuracy = 0
 
+    hud_elements, HudRect = render_hud(
+        settings_dict, minute, second, score, accuracy, rpm
+    )
+
+    # powerups
+    current_powerup = []
+
+    # background image
+    background = pygame.image.load("./assets/SpaceBackground.png")
+
+    # time limit for time trial game modes - in seconds
+    # None by default so that survival doesn't have a time limit
+    # gets changed if a time trial mode is chosen
+    time_limit = None
+
+    # button ids - odds for survival, evens for time trial
+    if button_id % 2 == 1:
+        time_limit = None
+    elif button_id % 2 == 0:
+        time_limit = 30
+
+    # settings_dict hud manipulation
+
+    for setting in settings_dict:
+        if settings_dict[setting]:
+            pass
+        else:
+            pass
+
+    # settings tracking
+
     while True:
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 return
 
-        time_multipler += dt * 0.001
-        if asteroids_destroyed > 0:
-            accuracy = asteroids_destroyed / player.bullets_shot * 100
+        screen.blit(background, (0, 0))
+
+        time_multipler += dt * TIME_MULTIPLIER_MAGIC
+        if player.bullets_shot > 0:
+            accuracy = int(asteroids_destroyed / player.bullets_shot * 100)
         else:
             accuracy = 0
+
+        rpm = int(60 // player.rpm)
 
         for obj in updatable:
             obj.update(dt)
 
+        # powerups
+        if second % 30 == 0 and current_powerup == []:
+            powerup = PowerUp(
+                random.randint(100, SCREEN_WIDTH - 100),
+                random.randint(100, SCREEN_HEIGHT - 100),
+            )
+            current_powerup.append(powerup)
+        else:
+            pass
+
+        # collision detection
         for asteroid in asteroids:
             if player.collision_detect(asteroid):
                 print("Game over!")
@@ -82,34 +123,32 @@ def main():
                 ):
                     bullet.kill()
                 if asteroid.collision_detect(bullet):
-                    score += asteroid.score * player.multiplier * time_multipler
+                    score += int(asteroid.score * player.multiplier * time_multipler)
                     bullet.owner.pop(bullet)
                     asteroids_destroyed += 1
                     bullet.kill()
                     asteroid.split()
 
-        screen.fill("black")
-
         # time tracking
         minute = pygame.time.get_ticks() // 1000 // 60
         second = pygame.time.get_ticks() // 1000 % 60
 
+        if time_limit is not None:
+            if time_limit <= second:
+                sys.exit()
+
         for obj in drawable:
             obj.draw(screen)
 
-            # draw time
-            TimeFont = Font.render(
-                "Time {0:02}:{1:02}        Score {2:d}     Accuracy {3:d}%".format(
-                    minute, second, int(score), int(accuracy)
-                ),
-                0,
-                White,
-            )
-            screen.blit(TimeFont, TimeFontR)
+            # draw top bar
+        hud_elements, HudRect = render_hud(
+            settings_dict, minute, second, score, accuracy, rpm
+        )
+        for element, rect in hud_elements:
+            screen.blit(element, rect)
+
+        # Optionally, draw the bounding rectangle for debugging
+        pygame.draw.rect(screen, (255, 0, 0), HudRect, 2)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
-
-
-if __name__ == "__main__":
-    main()

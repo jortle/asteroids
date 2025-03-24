@@ -21,11 +21,22 @@ class Player(TriangleShape):
         self.multiplier = 1
         self.bullets = []
         self.bullets_shot = 0
+        self.rpm = PLAYER_BASE_SHOOT_COOLDOWN
+
+        # image
+        self.image_path = "./assets/Player-Damaged.png"
+        self.image = pygame.image.load(self.image_path).convert_alpha()
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.rect = pygame.Rect(
+            self.position[0], self.position[1], self.width, self.height
+        )
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
     def draw(self, screen):
+        # screen.blit(self.image, (self.position[0], self.position[1]))
         pygame.draw.polygon(screen, "green", self.triangle(), 2)
 
         # below lines are used for debugging
@@ -42,6 +53,7 @@ class Player(TriangleShape):
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
+        self.rect.center = self.position
 
     def update(self, dt):
         self.timer -= dt

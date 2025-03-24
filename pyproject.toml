@@ -8,4 +8,5 @@ dependencies = [
     "pygame",
     "pygame-menu",
     "numpy",
+    "singlestoredb>=0.7.3",
 ]

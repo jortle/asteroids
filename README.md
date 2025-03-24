@@ -8,3 +8,4 @@ The project from boot.dev is a pretty bare bones guided tutorial on how to make 
 * time score multiplier
 * Score
 * Triangle hitbox - the tutorial has the player drawn as a triangle but the hitbox is a circle. I have updated the hitbox to fit the drawn player.
+* working HUD settings
