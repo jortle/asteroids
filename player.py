@@ -4,7 +4,7 @@ from constants import (
     PLAYER_RADIUS,
     PLAYER_TURN_SPEED,
     PLAYER_SPEED,
-    PLAYER_BASE_SHOOT_SPEED,
+    PLAYER_BASE_BULLET_VELOCITY,
     PLAYER_BASE_SHOOT_COOLDOWN,
     BULLET_BASE_RADIUS,
 )
@@ -18,11 +18,18 @@ class Player(TriangleShape):
         super().__init__(x, y)
         self.rotation = 0
         self.timer = 0
-        self.multiplier = 1
+        self.score_mult = 1
         self.bullets = []
         self.bullets_shot = 0
         self.rpm = PLAYER_BASE_SHOOT_COOLDOWN
         self.id = id
+        self.turn_mult = 1
+        self.turn_speed = PLAYER_TURN_SPEED * self.turn_mult
+        self.shield = False
+        self.move_speed_mult = 1
+        self.move_speed = PLAYER_SPEED * self.move_speed_mult
+        self.bullet_velocity_mult = 1
+        self.bullet_velocity = PLAYER_BASE_BULLET_VELOCITY * self.bullet_velocity_mult
 
         # image
         self.image_path = "./assets/Player-Damaged.png"
@@ -33,8 +40,12 @@ class Player(TriangleShape):
             self.position[0], self.position[1], self.width, self.height
         )
 
+    def rpm_up(self):
+        # rpm is 60 seconds // self.rpm (=200 by default)
+        self.rpm -= 0.01
+
     def rotate(self, dt):
-        self.rotation += PLAYER_TURN_SPEED * dt
+        self.rotation += self.turn_speed * dt
 
     def draw(self, screen):
         # screen.blit(self.image, (self.position[0], self.position[1]))
@@ -56,7 +67,7 @@ class Player(TriangleShape):
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * PLAYER_SPEED * dt
+        self.position += forward * self.move_speed * dt
         self.rect.center = self.position
 
     def update(self, dt):
@@ -91,11 +102,11 @@ class Player(TriangleShape):
         else:
             bullet = Bullets(self.position.x, self.position.y, BULLET_BASE_RADIUS, self)
             bullet.velocity = (
-                pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_BASE_SHOOT_SPEED
+                pygame.Vector2(0, 1).rotate(self.rotation) * self.bullet_velocity
             )
             self.bullets.append(bullet)
             self.bullets_shot += 1
-            self.timer = PLAYER_BASE_SHOOT_COOLDOWN
+            self.timer = self.rpm
 
     def pop(self, bullet):
         self.bullets.remove(bullet)
@@ -122,7 +133,5 @@ class Player(TriangleShape):
 
         return [front_point, back_point1, back_point2]
 
-    def collision_detect(self, asteroid):
-        return circle_triangle_collision(
-            asteroid.position, asteroid.radius, self.triangle()
-        )
+    def collision_detect(self, obj):
+        return circle_triangle_collision(obj.position, obj.radius, self.triangle())

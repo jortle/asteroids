@@ -1,5 +1,6 @@
 import sys
 import pygame
+from pygame import time
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, TIME_MULTIPLIER_MAGIC
 from asteroid import Asteroid
 from player import Player
@@ -31,10 +32,8 @@ def game_start(num_players, button_id, settings_dict):
 
     # creating players
     players = {}
-    print(num_players)
     for i in range(num_players):
         player_name = f"player{i}"
-        print(player_name)
         players[player_name] = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, player_name)
 
     dt = 0
@@ -59,7 +58,7 @@ def game_start(num_players, button_id, settings_dict):
     )
 
     # powerups
-    current_powerup = []
+    current_powerups = []
 
     # background image
     background = pygame.image.load("./assets/SpaceBackground.png")
@@ -83,9 +82,6 @@ def game_start(num_players, button_id, settings_dict):
         else:
             pass
 
-    for player in players:
-        print(players[player].id)
-
     while True:
         events = pygame.event.get()
         for event in events:
@@ -107,12 +103,12 @@ def game_start(num_players, button_id, settings_dict):
             obj.update(dt)
 
         # powerups
-        if second % 30 == 0 and current_powerup == []:
+        if second % 12 == 0 and current_powerups == []:
             powerup = PowerUp(
                 random.randint(100, SCREEN_WIDTH - 100),
                 random.randint(100, SCREEN_HEIGHT - 100),
             )
-            current_powerup.append(powerup)
+            current_powerups.append(powerup)
         else:
             pass
 
@@ -135,13 +131,21 @@ def game_start(num_players, button_id, settings_dict):
                 splitting_happened = False
                 if asteroid.collision_detect(bullet) and not splitting_happened:
                     score += int(
-                        asteroid.score * players[player].multiplier * time_multipler
+                        asteroid.score * players[player].score_mult * time_multipler
                     )
                     bullet.owner.pop(bullet)
                     asteroids_destroyed += 1
                     bullet.kill()
                     asteroid.split()
                     splitting_happened = True
+
+        # powerup collision detection
+        for player in players:
+            for powerup in current_powerups:
+                if players[player].collision_detect(powerup):
+                    powerup.apply(players[player])
+                    powerup.kill()
+                    current_powerups.remove(powerup)
 
         # time tracking
         minute = pygame.time.get_ticks() // 1000 // 60
