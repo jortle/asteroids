@@ -93,7 +93,7 @@ class Player(TriangleShape):
                 self.move(dt)
             if keys[pygame.K_DOWN]:
                 self.move(-dt)
-            if keys[pygame.K_RCTRL]:
+            if keys[pygame.K_RETURN]:
                 self.shoot()
 
     def shoot(self):

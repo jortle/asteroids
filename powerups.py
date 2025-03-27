@@ -11,11 +11,11 @@ class PowerUp(CircleShape):
         self.radius = radius
         self.effect = random.choice(
             [
-                # "player_speed",
-                # "rpm_up",
-                # "shield",
-                # "score_multiplier",
-                # "turn_speed",
+                "player_speed",
+                "rpm_up",
+                "shield",
+                "score_multiplier",
+                "turn_speed",
                 "bullet_velocity_up",
             ]
         )
