@@ -2,8 +2,6 @@
 
 A classic arcade space shooter game built in Python, based on a guided tutorial from boot.dev, but with several added features and improvements.
 
-**(Optional: Consider adding a screenshot or GIF here!)**
-
 ## About This Project
 
 This project started as a recreation of the original Asteroids game following a tutorial from boot.dev. I have since expanded upon the base tutorial, adding new features and refining existing ones.
@@ -31,8 +29,8 @@ For planned features, please see the `TODO.md` file (or link it: `[TODO.md](TODO
 1. **Clone the repository:**
 
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-directory>
+    git clone https://github.com/jortle/asteroids
+    cd asteroids
     ```
 
 2. **Set up a virtual environment (Recommended):**
@@ -51,13 +49,15 @@ For planned features, please see the `TODO.md` file (or link it: `[TODO.md](TODO
     * **Using uv (Recommended if you have it):**
 
         ```bash
+
     uv pip install .
         ```
 
     * **Using pip:**
 
         ```bash
-        pip install .
+
+    pip install .
         ```
 
 ## Running the Game
@@ -72,7 +72,7 @@ For planned features, please see the `TODO.md` file (or link it: `[TODO.md](TODO
     or
 
     ```
-    # uv run menu.py
+    uv run menu.py
     ```
 
 3. You should now be in the game menu. Currently, the only complete mode is Single Player Survival. Multiplayer Survival allows local co-op play but the HUD is still under development.
